@@ -2,6 +2,12 @@
 
 <Form version="1.3" maxVersion="1.9" type="org.netbeans.modules.form.forminfo.JFrameFormInfo">
   <NonVisualComponents>
+    <Component class="javax.swing.JFileChooser" name="fileChooser">
+      <Properties>
+        <Property name="acceptAllFileFilterUsed" type="boolean" value="false"/>
+        <Property name="multiSelectionEnabled" type="boolean" value="true"/>
+      </Properties>
+    </Component>
     <Menu class="javax.swing.JMenuBar" name="menuBar1">
       <Properties>
         <Property name="alignmentY" type="float" value="0.5"/>
@@ -20,6 +26,9 @@
                 </Property>
                 <Property name="text" type="java.lang.String" value="Open Playlist"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="menuOpenPlaylistActionPerformed"/>
+              </Events>
             </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="menuSavePlaylist">
               <Properties>
@@ -28,6 +37,9 @@
                 </Property>
                 <Property name="text" type="java.lang.String" value="Save Playlist"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="menuSavePlaylistActionPerformed"/>
+              </Events>
             </MenuItem>
             <MenuItem class="javax.swing.JPopupMenu$Separator" name="menuSeparator">
             </MenuItem>
@@ -58,11 +70,17 @@
                   <Properties>
                     <Property name="text" type="java.lang.String" value="Skin 1"/>
                   </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="menuSkin1ActionPerformed"/>
+                  </Events>
                 </MenuItem>
                 <MenuItem class="javax.swing.JMenuItem" name="menuSkin2">
                   <Properties>
                     <Property name="text" type="java.lang.String" value="Skin 2"/>
                   </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="menuSkin2ActionPerformed"/>
+                  </Events>
                 </MenuItem>
               </SubComponents>
             </Menu>
@@ -73,6 +91,7 @@
   </NonVisualComponents>
   <Properties>
     <Property name="defaultCloseOperation" type="int" value="3"/>
+    <Property name="resizable" type="boolean" value="false"/>
   </Properties>
   <SyntheticProperties>
     <SyntheticProperty name="menuBar" type="java.lang.String" value="menuBar1"/>
@@ -227,6 +246,9 @@
             </Property>
             <Property name="toolTipText" type="java.lang.String" value="Add to playlist"/>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnAddSongActionPerformed"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JButton" name="btnDeleteSong">
           <Properties>
@@ -235,6 +257,9 @@
             </Property>
             <Property name="toolTipText" type="java.lang.String" value="Delete from playlist"/>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnDeleteSongActionPerformed"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JSeparator" name="jSeparator1">
           <Properties>
@@ -248,6 +273,9 @@
             </Property>
             <Property name="toolTipText" type="java.lang.String" value="Next song"/>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnNextSongActionPerformed"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JButton" name="btnPrevSong">
           <Properties>
@@ -256,6 +284,9 @@
             </Property>
             <Property name="toolTipText" type="java.lang.String" value="Previous song"/>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnPrevSongActionPerformed"/>
+          </Events>
         </Component>
         <Container class="javax.swing.JScrollPane" name="scrlPanePL">
 
@@ -263,14 +294,8 @@
           <SubComponents>
             <Component class="javax.swing.JList" name="listPlayList">
               <Properties>
-                <Property name="model" type="javax.swing.ListModel" editor="org.netbeans.modules.form.editors2.ListModelEditor">
-                  <StringArray count="5">
-                    <StringItem index="0" value="Item 1"/>
-                    <StringItem index="1" value="Item 2"/>
-                    <StringItem index="2" value="Item 3"/>
-                    <StringItem index="3" value="Item 4"/>
-                    <StringItem index="4" value="Item 5"/>
-                  </StringArray>
+                <Property name="model" type="javax.swing.ListModel" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+                  <Connection code="mp3ListModel" type="code"/>
                 </Property>
               </Properties>
               <AuxValues>
@@ -310,6 +335,9 @@
             </Property>
             <Property name="toolTipText" type="java.lang.String" value=""/>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnPlayActionPerformed"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JButton" name="btnPause">
           <Properties>

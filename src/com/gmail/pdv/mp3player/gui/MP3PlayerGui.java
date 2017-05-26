@@ -5,12 +5,33 @@
  */
 package com.gmail.pdv.mp3player.gui;
 
+import com.gmail.pdv.mp3player.utils.FileUtils;
+import com.gmail.pdv.mp3player.utils.MP3;
+import com.gmail.pdv.mp3player.utils.MP3PlayerFileFilter;
+import com.gmail.pdv.mp3player.utils.SkinUtils;
+import java.io.File;
+import java.util.ArrayList;
+import javax.swing.DefaultListModel;
+import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
+import javax.swing.UIManager;
+import javax.swing.filechooser.FileFilter;
+import javax.swing.plaf.nimbus.NimbusLookAndFeel;
+
 /**
  *
  * @author dima
  */
 public class MP3PlayerGui extends javax.swing.JFrame {
-
+    
+    private static final String MP3_FILE_EXTENSION = "mp3";
+    private static final String MP3_FILE_DESCRIPTION = "audiofile mp3";
+    private static final String PLAYLIST_FILE_EXTENSION = "pls";
+    private static final String PLAYLIST_FILE_DESCRIPTION = "playlist file";
+    private DefaultListModel mp3ListModel = new DefaultListModel();
+    private FileFilter mp3FileFilter = new MP3PlayerFileFilter(MP3_FILE_EXTENSION, MP3_FILE_DESCRIPTION);
+    private FileFilter playlistFileFilter = new MP3PlayerFileFilter(PLAYLIST_FILE_EXTENSION, PLAYLIST_FILE_DESCRIPTION);
+    
     /**
      * Creates new form MP3PlayerGui
      */
@@ -27,6 +48,7 @@ public class MP3PlayerGui extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        fileChooser = new javax.swing.JFileChooser();
         panelMain = new javax.swing.JPanel();
         btnAddSong = new javax.swing.JButton();
         btnDeleteSong = new javax.swing.JButton();
@@ -56,29 +78,49 @@ public class MP3PlayerGui extends javax.swing.JFrame {
         menuSkin1 = new javax.swing.JMenuItem();
         menuSkin2 = new javax.swing.JMenuItem();
 
+        fileChooser.setAcceptAllFileFilterUsed(false);
+        fileChooser.setMultiSelectionEnabled(true);
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setResizable(false);
 
         panelMain.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
         btnAddSong.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/gmail/pdv/mp3player/images/add_16x16.png"))); // NOI18N
         btnAddSong.setToolTipText("Add to playlist");
+        btnAddSong.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAddSongActionPerformed(evt);
+            }
+        });
 
         btnDeleteSong.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/gmail/pdv/mp3player/images/delete_16x16.png"))); // NOI18N
         btnDeleteSong.setToolTipText("Delete from playlist");
+        btnDeleteSong.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDeleteSongActionPerformed(evt);
+            }
+        });
 
         jSeparator1.setOrientation(javax.swing.SwingConstants.VERTICAL);
 
         btnNextSong.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/gmail/pdv/mp3player/images/arrowdown_16x16.png"))); // NOI18N
         btnNextSong.setToolTipText("Next song");
+        btnNextSong.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnNextSongActionPerformed(evt);
+            }
+        });
 
         btnPrevSong.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/gmail/pdv/mp3player/images/arrowup_16x16.png"))); // NOI18N
         btnPrevSong.setToolTipText("Previous song");
-
-        listPlayList.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-            public int getSize() { return strings.length; }
-            public String getElementAt(int i) { return strings[i]; }
+        btnPrevSong.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnPrevSongActionPerformed(evt);
+            }
         });
+
+        listPlayList.setModel(mp3ListModel);
         scrlPanePL.setViewportView(listPlayList);
 
         tbtnMute.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/gmail/pdv/mp3player/images/vol_32x32.png"))); // NOI18N
@@ -92,6 +134,11 @@ public class MP3PlayerGui extends javax.swing.JFrame {
 
         btnPlay.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/gmail/pdv/mp3player/images/play_32x32.png"))); // NOI18N
         btnPlay.setToolTipText("");
+        btnPlay.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnPlayActionPerformed(evt);
+            }
+        });
 
         btnPause.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/gmail/pdv/mp3player/images/pause_32x32.png"))); // NOI18N
         btnPause.setToolTipText("");
@@ -214,10 +261,20 @@ public class MP3PlayerGui extends javax.swing.JFrame {
 
         menuOpenPlaylist.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/gmail/pdv/mp3player/images/open_pl_16x16.png"))); // NOI18N
         menuOpenPlaylist.setText("Open Playlist");
+        menuOpenPlaylist.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuOpenPlaylistActionPerformed(evt);
+            }
+        });
         menuFile.add(menuOpenPlaylist);
 
         menuSavePlaylist.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/gmail/pdv/mp3player/images/save_pl_16x16.png"))); // NOI18N
         menuSavePlaylist.setText("Save Playlist");
+        menuSavePlaylist.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuSavePlaylistActionPerformed(evt);
+            }
+        });
         menuFile.add(menuSavePlaylist);
         menuFile.add(menuSeparator);
 
@@ -233,9 +290,19 @@ public class MP3PlayerGui extends javax.swing.JFrame {
         menuChangeSkin.setText("Change Skin");
 
         menuSkin1.setText("Skin 1");
+        menuSkin1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuSkin1ActionPerformed(evt);
+            }
+        });
         menuChangeSkin.add(menuSkin1);
 
         menuSkin2.setText("Skin 2");
+        menuSkin2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuSkin2ActionPerformed(evt);
+            }
+        });
         menuChangeSkin.add(menuSkin2);
 
         menuEdit.add(menuChangeSkin);
@@ -268,6 +335,110 @@ public class MP3PlayerGui extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void menuSkin1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuSkin1ActionPerformed
+        SkinUtils.changeSkin(this, UIManager.getSystemLookAndFeelClassName());
+    }//GEN-LAST:event_menuSkin1ActionPerformed
+
+    private void menuSkin2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuSkin2ActionPerformed
+        SkinUtils.changeSkin(this, new NimbusLookAndFeel());
+    }//GEN-LAST:event_menuSkin2ActionPerformed
+
+    private void btnAddSongActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddSongActionPerformed
+        FileUtils.addFileEilter(fileChooser, mp3FileFilter); //set file filter
+        int result = fileChooser.showOpenDialog(this);  //result keeps result of selection - file selected or not 
+        
+        if (result == JFileChooser.APPROVE_OPTION){ //if pressed YES or OK
+            File[] selectedFiles = fileChooser.getSelectedFiles();
+            //add all selected files to playlist
+            for (File file : selectedFiles) {
+                MP3 mp3 = new MP3 (file.getName(), file.getPath());
+                mp3ListModel.addElement(mp3);
+            }
+            
+        }
+        
+    }//GEN-LAST:event_btnAddSongActionPerformed
+
+    private void btnDeleteSongActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteSongActionPerformed
+        int[] indexPlayList = listPlayList.getSelectedIndices(); // obtain indexes of selected songs in our playlist
+        if (indexPlayList.length > 0){ //if at leas 1 song was selected
+            ArrayList <MP3> mp3ListForRemove = new ArrayList<>(); //store in separate collection all mp3 selected for delete
+            for (int i = 0; i < indexPlayList.length; i++) {
+                MP3 mp3 = (MP3) mp3ListModel.getElementAt(indexPlayList[i]);
+                mp3ListForRemove.add(mp3);
+            }
+            //remove mp3 from playlist
+            for (MP3 mp3 : mp3ListForRemove){
+                mp3ListModel.removeElement(mp3);
+            }
+            
+           
+        }
+    }//GEN-LAST:event_btnDeleteSongActionPerformed
+
+    private void btnNextSongActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNextSongActionPerformed
+        int nextIndex = listPlayList.getSelectedIndex() + 1;
+        if (nextIndex <= listPlayList.getModel().getSize() -1){ //check for out of bounds
+            listPlayList.setSelectedIndex(nextIndex);
+        }
+    }//GEN-LAST:event_btnNextSongActionPerformed
+
+    private void btnPrevSongActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPrevSongActionPerformed
+        int prevIndex = listPlayList.getSelectedIndex() - 1;
+        if (prevIndex >= 0){  //check for out of bounds
+            listPlayList.setSelectedIndex(prevIndex);
+        }
+    }//GEN-LAST:event_btnPrevSongActionPerformed
+
+    private void btnPlayActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPlayActionPerformed
+        int[] indexPlayList = listPlayList.getSelectedIndices(); // obtain selected tracks indexes
+        if (indexPlayList.length > 0){ // if at least one track was slected
+            MP3 mp3 = (MP3) mp3ListModel.getElementAt(indexPlayList[0]); // take 1st selected track - bcs. no possible to play couple tracks simultaneously
+            System.out.println (mp3.getPath());
+            
+        }
+    }//GEN-LAST:event_btnPlayActionPerformed
+
+    private void menuSavePlaylistActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuSavePlaylistActionPerformed
+        FileUtils.addFileEilter(fileChooser, playlistFileFilter);
+        int result = fileChooser.showSaveDialog(this);
+        if (result == JFileChooser.APPROVE_OPTION){
+            File selectedFile = fileChooser.getSelectedFile();
+            if (selectedFile.exists()){
+                
+                int resultOverride = JOptionPane.showConfirmDialog(this, "Selected file exists", "Do you want to override it?", JOptionPane.YES_NO_CANCEL_OPTION);
+                switch (resultOverride){
+                    case JOptionPane.NO_OPTION:
+                        menuSavePlaylistActionPerformed(evt); //open saving window again
+                        return;
+                    case JOptionPane.CANCEL_OPTION:
+                        fileChooser.cancelSelection();
+                        return;
+                }
+                fileChooser.approveSelection();
+            }
+            String fileExtension = FileUtils.getFileExtension(selectedFile);
+            //form file name (do we need to add extension to file name, or it was add by user)
+            String fileNameForSave = (fileExtension != null && fileExtension.equals(PLAYLIST_FILE_EXTENSION)) ? selectedFile.getPath() : selectedFile.getPath() + PLAYLIST_FILE_EXTENSION;
+            
+            FileUtils.serialize (mp3ListModel, fileNameForSave);
+        }
+                
+        
+    }//GEN-LAST:event_menuSavePlaylistActionPerformed
+
+    private void menuOpenPlaylistActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuOpenPlaylistActionPerformed
+        FileUtils.addFileEilter(fileChooser, playlistFileFilter);
+        int result = fileChooser.showOpenDialog(this);
+        
+        if (result == JFileChooser.APPROVE_OPTION){
+            File selectedFile = fileChooser.getSelectedFile();
+            DefaultListModel mp3LM = (DefaultListModel) FileUtils.deserialize(selectedFile.getPath());
+            this.mp3ListModel = mp3LM;
+            listPlayList.setModel(mp3LM);
+        }
+    }//GEN-LAST:event_menuOpenPlaylistActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -293,6 +464,7 @@ public class MP3PlayerGui extends javax.swing.JFrame {
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(MP3PlayerGui.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        
         //</editor-fold>
 
         /* Create and display the form */
@@ -303,6 +475,7 @@ public class MP3PlayerGui extends javax.swing.JFrame {
         });
     }
 
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAddSong;
     private javax.swing.JButton btnDeleteSong;
@@ -314,6 +487,7 @@ public class MP3PlayerGui extends javax.swing.JFrame {
     private javax.swing.JButton btnPrevTrack;
     private javax.swing.JButton btnSearch;
     private javax.swing.JButton btnStop;
+    private javax.swing.JFileChooser fileChooser;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JList<String> listPlayList;
     private javax.swing.JMenuBar menuBar1;
