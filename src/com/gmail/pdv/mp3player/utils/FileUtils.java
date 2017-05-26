@@ -2,14 +2,12 @@ package com.gmail.pdv.mp3player.utils;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.DefaultListModel;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileFilter;
 
@@ -20,16 +18,20 @@ public class FileUtils {
     public static void addFileEilter (JFileChooser jfc, FileFilter ff){
         jfc.removeChoosableFileFilter(jfc.getFileFilter());
         jfc.setFileFilter(ff);
-        jfc.setSelectedFile(new File("")); //delete name of last opened/saved file
+        //jfc.setSelectedFile(new File("")); //delete name of last opened/saved file
         
     }
 
     public static String getFileNameWithoutExtension(String fileName) {
         File file = new File (fileName);
-        int index = file.getName().indexOf('.');
-        if (index > 0 && index <= file.getName().length() - 2){
-            return file.getName().substring(0, index);
-        }
+//        int index = file.getName().indexOf('.');
+//        if (index > 0 && index <= file.getName().length() - 2){
+//            return file.getName().substring(0, index);
+//        }
+          int index = file.getName().length() - 4;
+          if (index > 0 && file.getName().charAt(index) == '.'){
+             return file.getName().substring(0, index); 
+          }
         return "noname";
     }
     

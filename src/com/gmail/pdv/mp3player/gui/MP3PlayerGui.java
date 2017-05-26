@@ -13,6 +13,7 @@ import com.gmail.pdv.mp3player.utils.SkinUtils;
 import java.awt.event.InputEvent;
 import java.io.File;
 import java.util.ArrayList;
+import javafx.scene.input.KeyCode;
 import javax.swing.DefaultListModel;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
@@ -287,6 +288,11 @@ public class MP3PlayerGui extends javax.swing.JFrame {
             }
             public void focusLost(java.awt.event.FocusEvent evt) {
                 txtSearchFocusLost(evt);
+            }
+        });
+        txtSearch.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtSearchKeyPressed(evt);
             }
         });
 
@@ -570,7 +576,7 @@ public class MP3PlayerGui extends javax.swing.JFrame {
     }//GEN-LAST:event_slideVolumeStateChanged
 
     private void btnNextTrackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNextTrackActionPerformed
-        btnNextTrackActionPerformed(evt);
+        btnNextSongActionPerformed(evt);
         btnPlayActionPerformed(evt);
     }//GEN-LAST:event_btnNextTrackActionPerformed
 
@@ -590,6 +596,10 @@ public class MP3PlayerGui extends javax.swing.JFrame {
             }
         }
     }//GEN-LAST:event_listPlayListMouseClicked
+
+    private void txtSearchKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtSearchKeyPressed
+       
+    }//GEN-LAST:event_txtSearchKeyPressed
 
     /**
      * @param args the command line arguments

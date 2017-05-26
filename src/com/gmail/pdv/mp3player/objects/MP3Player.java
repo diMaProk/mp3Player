@@ -10,7 +10,7 @@ import javazoom.jlgui.basicplayer.BasicPlayerException;
 
 public class MP3Player {
     
-    private BasicPlayer player = new BasicPlayer();
+    private final BasicPlayer player = new BasicPlayer();
     
     private String currentFileName;
     private double currentVolumeValue;
