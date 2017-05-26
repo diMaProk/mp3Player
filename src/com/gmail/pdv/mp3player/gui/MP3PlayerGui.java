@@ -28,6 +28,8 @@ public class MP3PlayerGui extends javax.swing.JFrame {
     private static final String MP3_FILE_DESCRIPTION = "audiofile mp3";
     private static final String PLAYLIST_FILE_EXTENSION = "pls";
     private static final String PLAYLIST_FILE_DESCRIPTION = "playlist file";
+    private static final String ENTER_TRACK_NAME = "enter track name";
+    private static final String EMPY_STRING = "";
     private DefaultListModel mp3ListModel = new DefaultListModel();
     private FileFilter mp3FileFilter = new MP3PlayerFileFilter(MP3_FILE_EXTENSION, MP3_FILE_DESCRIPTION);
     private FileFilter playlistFileFilter = new MP3PlayerFileFilter(PLAYLIST_FILE_EXTENSION, PLAYLIST_FILE_DESCRIPTION);
@@ -228,10 +230,28 @@ public class MP3PlayerGui extends javax.swing.JFrame {
         btnSearch.setText("Seach");
         btnSearch.setToolTipText("Search song");
         btnSearch.setPreferredSize(new java.awt.Dimension(90, 35));
+        btnSearch.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                btnSearchFocusGained(evt);
+            }
+        });
+        btnSearch.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSearchActionPerformed(evt);
+            }
+        });
 
         txtSearch.setFont(new java.awt.Font("Dialog", 2, 12)); // NOI18N
         txtSearch.setText("enter track name");
         txtSearch.setPreferredSize(new java.awt.Dimension(120, 35));
+        txtSearch.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                txtSearchFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                txtSearchFocusLost(evt);
+            }
+        });
 
         javax.swing.GroupLayout panelSearchLayout = new javax.swing.GroupLayout(panelSearch);
         panelSearch.setLayout(panelSearchLayout);
@@ -438,6 +458,61 @@ public class MP3PlayerGui extends javax.swing.JFrame {
             listPlayList.setModel(mp3LM);
         }
     }//GEN-LAST:event_menuOpenPlaylistActionPerformed
+
+    private void btnSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchActionPerformed
+        String searchStr = txtSearch.getText();
+        
+        //if nothing was entered - do nothing and go out of the method
+        if (searchStr == null || searchStr.trim().equals(EMPY_STRING)) {
+            return;
+        }
+        
+        //idexes of all found objects will be store in the ollection
+        ArrayList <Integer> mp3FoundIndexes = new ArrayList<>();
+        
+        //iterate over collection ad looking for conformity of search string and track name
+        for (int i = 0; i < mp3ListModel.size(); i++) {
+            MP3 mp3 = (MP3) mp3ListModel.getElementAt(i);
+            
+            if (mp3.getName().toUpperCase().contains(searchStr.toUpperCase())){
+                mp3FoundIndexes.add(i); //add found index to collection
+            }            
+        }
+        
+        //save collection to the array
+        int[] selectedIndexes = new int[mp3FoundIndexes.size()];
+        
+        if (selectedIndexes.length == 0){ //found no track
+            JOptionPane.showMessageDialog(this, "No tracks found for entered name");
+            txtSearch.requestFocus();
+            txtSearch.selectAll();
+            return;
+        }
+        
+        //transform collection to array, bcs. method for row selection in JList works only with array
+        for (int i=0; i < selectedIndexes.length; i++){
+            selectedIndexes[i] = mp3FoundIndexes.get(i).intValue();
+        }
+        
+        //select found tracks in playlist
+        listPlayList.setSelectedIndices(selectedIndexes);
+    }//GEN-LAST:event_btnSearchActionPerformed
+
+    private void btnSearchFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_btnSearchFocusGained
+        
+    }//GEN-LAST:event_btnSearchFocusGained
+
+    private void txtSearchFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtSearchFocusLost
+        if (txtSearch.getText().trim().equals(EMPY_STRING)){
+            txtSearch.setText(ENTER_TRACK_NAME);
+        }
+    }//GEN-LAST:event_txtSearchFocusLost
+
+    private void txtSearchFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtSearchFocusGained
+        if (txtSearch.getText().equals(ENTER_TRACK_NAME)){
+            txtSearch.setText(EMPY_STRING);
+        }
+    }//GEN-LAST:event_txtSearchFocusGained
 
     /**
      * @param args the command line arguments
