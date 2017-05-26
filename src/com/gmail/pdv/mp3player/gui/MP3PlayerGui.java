@@ -6,9 +6,11 @@
 package com.gmail.pdv.mp3player.gui;
 
 import com.gmail.pdv.mp3player.utils.FileUtils;
-import com.gmail.pdv.mp3player.utils.MP3;
+import com.gmail.pdv.mp3player.objects.MP3;
+import com.gmail.pdv.mp3player.objects.MP3Player;
 import com.gmail.pdv.mp3player.utils.MP3PlayerFileFilter;
 import com.gmail.pdv.mp3player.utils.SkinUtils;
+import java.awt.event.InputEvent;
 import java.io.File;
 import java.util.ArrayList;
 import javax.swing.DefaultListModel;
@@ -17,6 +19,7 @@ import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.plaf.nimbus.NimbusLookAndFeel;
+
 
 /**
  *
@@ -33,6 +36,7 @@ public class MP3PlayerGui extends javax.swing.JFrame {
     private DefaultListModel mp3ListModel = new DefaultListModel();
     private FileFilter mp3FileFilter = new MP3PlayerFileFilter(MP3_FILE_EXTENSION, MP3_FILE_DESCRIPTION);
     private FileFilter playlistFileFilter = new MP3PlayerFileFilter(PLAYLIST_FILE_EXTENSION, PLAYLIST_FILE_DESCRIPTION);
+    private static final MP3Player player = new MP3Player();
     
     /**
      * Creates new form MP3PlayerGui
@@ -123,16 +127,34 @@ public class MP3PlayerGui extends javax.swing.JFrame {
         });
 
         listPlayList.setModel(mp3ListModel);
+        listPlayList.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                listPlayListMouseClicked(evt);
+            }
+        });
         scrlPanePL.setViewportView(listPlayList);
 
         tbtnMute.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/gmail/pdv/mp3player/images/vol_32x32.png"))); // NOI18N
         tbtnMute.setToolTipText("Sound OFF");
         tbtnMute.setSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/com/gmail/pdv/mp3player/images/vol_off_32x32.png"))); // NOI18N
 
+        slideVolume.setMaximum(200);
+        slideVolume.setMinorTickSpacing(5);
+        slideVolume.setSnapToTicks(true);
         slideVolume.setValue(80);
+        slideVolume.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                slideVolumeStateChanged(evt);
+            }
+        });
 
         btnPrevTrack.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/gmail/pdv/mp3player/images/prevTrack_32x32.png"))); // NOI18N
         btnPrevTrack.setToolTipText("");
+        btnPrevTrack.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnPrevTrackActionPerformed(evt);
+            }
+        });
 
         btnPlay.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/gmail/pdv/mp3player/images/play_32x32.png"))); // NOI18N
         btnPlay.setToolTipText("");
@@ -144,10 +166,25 @@ public class MP3PlayerGui extends javax.swing.JFrame {
 
         btnPause.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/gmail/pdv/mp3player/images/pause_32x32.png"))); // NOI18N
         btnPause.setToolTipText("");
+        btnPause.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnPauseActionPerformed(evt);
+            }
+        });
 
         btnStop.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/gmail/pdv/mp3player/images/stop_32x32.png"))); // NOI18N
+        btnStop.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnStopActionPerformed(evt);
+            }
+        });
 
         btnNextTrack.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/gmail/pdv/mp3player/images/nextTrack_32x32.png"))); // NOI18N
+        btnNextTrack.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnNextTrackActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout panelMainLayout = new javax.swing.GroupLayout(panelMain);
         panelMain.setLayout(panelMainLayout);
@@ -414,8 +451,8 @@ public class MP3PlayerGui extends javax.swing.JFrame {
         int[] indexPlayList = listPlayList.getSelectedIndices(); // obtain selected tracks indexes
         if (indexPlayList.length > 0){ // if at least one track was slected
             MP3 mp3 = (MP3) mp3ListModel.getElementAt(indexPlayList[0]); // take 1st selected track - bcs. no possible to play couple tracks simultaneously
-            System.out.println (mp3.getPath());
-            
+            player.play (mp3.getPath());
+            player.setVolume(slideVolume.getValue(), slideVolume.getMaximum());
         }
     }//GEN-LAST:event_btnPlayActionPerformed
 
@@ -513,6 +550,46 @@ public class MP3PlayerGui extends javax.swing.JFrame {
             txtSearch.setText(EMPY_STRING);
         }
     }//GEN-LAST:event_txtSearchFocusGained
+
+    private void btnStopActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnStopActionPerformed
+        player.stop();
+    }//GEN-LAST:event_btnStopActionPerformed
+
+    private void btnPauseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPauseActionPerformed
+        player.pause();
+    }//GEN-LAST:event_btnPauseActionPerformed
+
+    private void slideVolumeStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_slideVolumeStateChanged
+       player.setVolume(slideVolume.getValue(), slideVolume.getMaximum());
+       
+       if (slideVolume.getValue() == 0){
+           tbtnMute.setSelected(true);
+       } else{
+           tbtnMute.setSelected(false);
+       }
+    }//GEN-LAST:event_slideVolumeStateChanged
+
+    private void btnNextTrackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNextTrackActionPerformed
+        btnNextTrackActionPerformed(evt);
+        btnPlayActionPerformed(evt);
+    }//GEN-LAST:event_btnNextTrackActionPerformed
+
+    private void btnPrevTrackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPrevTrackActionPerformed
+        btnPrevSongActionPerformed(evt);
+        btnPlayActionPerformed(evt);
+    }//GEN-LAST:event_btnPrevTrackActionPerformed
+
+    private void listPlayListMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_listPlayListMouseClicked
+        //if left muse button was clicked twise
+        if(evt.getModifiers() == InputEvent.BUTTON1_MASK && evt.getClickCount() == 2){
+            int[] indexPlayList = listPlayList.getSelectedIndices();
+            if (indexPlayList.length > 0){
+                MP3 mp3 = (MP3) mp3ListModel.getElementAt(indexPlayList[0]);
+                player.play(mp3.getPath());
+                player.setVolume(slideVolume.getValue(), slideVolume.getMaximum());
+            }
+        }
+    }//GEN-LAST:event_listPlayListMouseClicked
 
     /**
      * @param args the command line arguments

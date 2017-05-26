@@ -1,5 +1,6 @@
-package com.gmail.pdv.mp3player.utils;
+package com.gmail.pdv.mp3player.objects;
 
+import com.gmail.pdv.mp3player.utils.FileUtils;
 import java.io.Serializable;
 
 
@@ -21,6 +22,12 @@ public class MP3 implements Serializable {
     public String getPath() {
         return path;
     }
+
+    public String getName() {
+        return name;
+    }
+    
+    
 
     
    

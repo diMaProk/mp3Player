@@ -298,6 +298,9 @@
                   <Connection code="mp3ListModel" type="code"/>
                 </Property>
               </Properties>
+              <Events>
+                <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="listPlayListMouseClicked"/>
+              </Events>
               <AuxValues>
                 <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
               </AuxValues>
@@ -317,8 +320,14 @@
         </Component>
         <Component class="javax.swing.JSlider" name="slideVolume">
           <Properties>
+            <Property name="maximum" type="int" value="200"/>
+            <Property name="minorTickSpacing" type="int" value="5"/>
+            <Property name="snapToTicks" type="boolean" value="true"/>
             <Property name="value" type="int" value="80"/>
           </Properties>
+          <Events>
+            <EventHandler event="stateChanged" listener="javax.swing.event.ChangeListener" parameters="javax.swing.event.ChangeEvent" handler="slideVolumeStateChanged"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JButton" name="btnPrevTrack">
           <Properties>
@@ -327,6 +336,9 @@
             </Property>
             <Property name="toolTipText" type="java.lang.String" value=""/>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnPrevTrackActionPerformed"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JButton" name="btnPlay">
           <Properties>
@@ -346,6 +358,9 @@
             </Property>
             <Property name="toolTipText" type="java.lang.String" value=""/>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnPauseActionPerformed"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JButton" name="btnStop">
           <Properties>
@@ -353,6 +368,9 @@
               <Image iconType="3" name="/com/gmail/pdv/mp3player/images/stop_32x32.png"/>
             </Property>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnStopActionPerformed"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JButton" name="btnNextTrack">
           <Properties>
@@ -360,6 +378,9 @@
               <Image iconType="3" name="/com/gmail/pdv/mp3player/images/nextTrack_32x32.png"/>
             </Property>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnNextTrackActionPerformed"/>
+          </Events>
         </Component>
       </SubComponents>
     </Container>
